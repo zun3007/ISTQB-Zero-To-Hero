@@ -1,0 +1,571 @@
+/* Chapter 6 — Test Tools (CTFL v4.0 §6) */
+
+const ch6 = {
+  id: 'ch6',
+  number: 6,
+  slug: 'test-tools',
+  title: { vn: 'Công cụ Kiểm thử', en: 'Test Tools' },
+  tagline: 'Công cụ là đòn bẩy — nếu dùng đúng chỗ.',
+  bigIdea:
+    'Công cụ hỗ trợ nhiều hoạt động test, nhưng tự động hoá có cả lợi ích lẫn rủi ro. Công cụ là đòn bẩy cho tư duy test, không phải vật thay thế nó.',
+  estMinutes: 28,
+  accent: 'brand',
+  icon: 'wrench',
+  objectives: [
+    { code: 'FL-6.1.1', k: 'K2', text: 'Giải thích cách các loại test tool hỗ trợ testing' },
+    { code: 'FL-6.2.1', k: 'K1', text: 'Nhớ lợi ích & rủi ro của test automation' },
+  ],
+
+  lessons: [
+    /* ── 6.1a ────────────────────────────────────────────────────────────── */
+    {
+      id: 'ch6-l1',
+      slug: 'how-tools-support-testing',
+      title: { vn: 'Công cụ hỗ trợ testing thế nào?', en: 'How Tools Support Testing' },
+      estMinutes: 7,
+      objectives: ['FL-6.1.1'],
+      hook: 'Một con dao mổ sắc bén không tự nó cứu được bệnh nhân — nó chỉ làm bàn tay bác sĩ giỏi giỏi hơn. Test tool cũng vậy: nó khuếch đại tư duy test, chứ không tạo ra tư duy.',
+      blocks: [
+        { type: 'lead', md: 'Chương này là chương **ngắn nhất** của CTFL v4.0, nhưng đừng coi thường: đề thi gần như chắc chắn có 1–2 câu. Mấu chốt là hiểu *tool hỗ trợ cái gì* và *automation đánh đổi gì*.' },
+        { type: 'h2', text: 'Tool support là gì?' },
+        { type: 'p', md: 'Trong suốt quá trình test, có vô số việc lặp đi lặp lại, dễ chán, dễ sai khi làm tay: nhập hàng nghìn bộ dữ liệu, so sánh kết quả, chạy lại regression sau mỗi build, gom số liệu cho báo cáo… Đây chính là chỗ **test tool** toả sáng — nó gánh phần *cơ bắp* để con người tập trung vào phần *trí não*.' },
+        {
+          type: 'analogy',
+          emoji: '🦾',
+          title: 'Tool như bộ xương trợ lực (exoskeleton)',
+          md: 'Bộ exoskeleton giúp công nhân nâng vật nặng cả ngày không mỏi. Nhưng *quyết định nâng cái gì, đặt vào đâu* vẫn là của con người. Tool automation giúp bạn chạy 5000 test trong đêm — nhưng *test cái gì và vì sao* vẫn là tư duy của tester.',
+        },
+        {
+          type: 'callout',
+          variant: 'definition',
+          title: 'Test tool',
+          md: 'Một công cụ phần mềm **hỗ trợ một hoặc nhiều hoạt động test** — ví dụ lập kế hoạch, theo dõi, thiết kế test, sinh dữ liệu, thực thi, so sánh kết quả, đo coverage, quản lý defect…',
+        },
+        { type: 'h2', text: 'Lợi ích chung mà tool mang lại' },
+        { type: 'p', md: 'ISTQB nhấn mạnh tool hỗ trợ test theo bốn nhóm giá trị chính:' },
+        {
+          type: 'list',
+          items: [
+            'Giảm các hoạt động **lặp lại, thủ công** (chạy regression, nhập lại dữ liệu, so sánh kết quả) → tiết kiệm công sức.',
+            'Tăng **tính nhất quán & khả năng lặp lại** (repeatability): máy không “quên” bước, không “mỏi tay”.',
+            'Cung cấp **đánh giá khách quan** — ví dụ đo static metrics, đo coverage — thay cho cảm tính.',
+            'Giúp truy cập thông tin về test **dễ dàng** hơn (thống kê, biểu đồ, dashboard cho việc giám sát và báo cáo).',
+          ],
+        },
+        {
+          type: 'callout',
+          variant: 'exam-trap',
+          title: 'Bẫy thi kinh điển',
+          md: 'Tool **không tự sinh ra chất lượng test**. Một bộ test thiết kế tồi mà đem tự động hoá thì chỉ là… chạy nhanh một bộ test tồi. Đề rất thích phương án dạng “tool tự động bảo đảm coverage / tìm hết bug” — đều SAI.',
+        },
+        {
+          type: 'interactive',
+          kind: 'sort',
+          title: 'Việc nào nên giao cho tool?',
+          prompt: 'Phân loại: việc nào tool làm tốt hơn người, việc nào vẫn cần con người.',
+          buckets: ['Tool làm tốt hơn', 'Vẫn cần con người'],
+          items: [
+            { label: 'Chạy lại 2000 regression test mỗi đêm', correctBucket: 'Tool làm tốt hơn' },
+            { label: 'So sánh hàng nghìn dòng kết quả với baseline', correctBucket: 'Tool làm tốt hơn' },
+            { label: 'Đo code coverage sau khi chạy test', correctBucket: 'Tool làm tốt hơn' },
+            { label: 'Quyết định phần nào của hệ thống rủi ro nhất để test', correctBucket: 'Vẫn cần con người' },
+            { label: 'Khám phá hành vi lạ của UI bằng trực giác (exploratory)', correctBucket: 'Vẫn cần con người' },
+            { label: 'Đánh giá một thông báo lỗi có “thân thiện với người dùng” không', correctBucket: 'Vẫn cần con người' },
+          ],
+        },
+        {
+          type: 'checkpoint',
+          questions: [
+            {
+              id: 'ck-6-1-1',
+              type: 'single',
+              k: 'K2',
+              lo: 'FL-6.1.1',
+              stem: 'Which of the following is a typical benefit of using test tools?',
+              options: [
+                { id: 'a', text: 'They guarantee the software is defect-free' },
+                { id: 'b', text: 'They reduce repetitive manual work and improve consistency' },
+                { id: 'c', text: 'They remove the need to design test cases' },
+                { id: 'd', text: 'They replace the tester’s judgement about what to test' },
+              ],
+              correct: ['b'],
+              explanation:
+                'Lợi ích cốt lõi của tool là giảm việc lặp lại thủ công và tăng tính nhất quán/repeatability. Tool **không** bảo đảm hết lỗi, không thay thế thiết kế test, và không thay thế tư duy của tester về việc test cái gì.',
+              topic: 'tool benefits',
+            },
+            {
+              id: 'ck-6-1-2',
+              type: 'truefalse',
+              k: 'K2',
+              lo: 'FL-6.1.1',
+              stem: 'Automating a poorly designed set of tests will turn it into a good test suite.',
+              correct: ['false'],
+              explanation:
+                'Sai. Tự động hoá chỉ giúp *chạy nhanh và lặp lại* được những gì đã thiết kế. Một bộ test thiết kế kém, khi tự động hoá, vẫn là bộ test kém — chỉ chạy nhanh hơn mà thôi.',
+              topic: 'tool benefits',
+            },
+          ],
+        },
+      ],
+      keyTerms: [
+        { en: 'Test tool', vn: 'Công cụ kiểm thử', def: 'Phần mềm hỗ trợ một hoặc nhiều hoạt động test (lập kế hoạch, thiết kế, thực thi, so sánh, đo coverage, quản lý defect…).' },
+        { en: 'Test automation', vn: 'Tự động hoá kiểm thử', def: 'Việc dùng phần mềm để thực hiện hoặc hỗ trợ các hoạt động test, ví dụ tự động chạy và đánh giá kết quả test.' },
+        { en: 'Repeatability', vn: 'Khả năng lặp lại', def: 'Khả năng thực hiện cùng một test theo đúng cách nhiều lần và cho kết quả nhất quán — thế mạnh của tool.' },
+        { en: 'Regression test', vn: 'Kiểm thử hồi quy', def: 'Test lại để bảo đảm thay đổi/sửa lỗi không phá vỡ chức năng đang chạy tốt; là ứng viên hàng đầu cho automation.' },
+      ],
+    },
+
+    /* ── 6.1b ────────────────────────────────────────────────────────────── */
+    {
+      id: 'ch6-l2',
+      slug: 'tool-categories',
+      title: { vn: 'Phân loại Test Tool theo hoạt động', en: 'Categories of Test Tools' },
+      estMinutes: 8,
+      objectives: ['FL-6.1.1'],
+      hook: 'Có cả một “hộp đồ nghề” test tool — và mỗi món gắn với một hoạt động trong test process. Biết món nào cho việc nào là một dạng câu hỏi K2 ra thi thường xuyên.',
+      blocks: [
+        { type: 'lead', md: 'ISTQB phân loại tool **theo hoạt động test mà nó hỗ trợ**. Bạn không cần thuộc tên sản phẩm thương mại — chỉ cần ghép đúng *loại tool* với *hoạt động*.' },
+        { type: 'h2', text: 'Các nhóm tool theo hoạt động test' },
+        {
+          type: 'table',
+          headers: ['Nhóm hoạt động', 'Loại tool hỗ trợ (ví dụ)'],
+          rows: [
+            ['**Quản lý test & testware**', 'Test management tools, application lifecycle management (ALM), requirements management, defect management, configuration management tools'],
+            ['**Static testing**', 'Static analysis tools (phân tích code tĩnh), công cụ hỗ trợ review'],
+            ['**Test design & implementation**', 'Test design tools, model-based testing tools, test data preparation tools'],
+            ['**Test execution & coverage**', 'Test execution tools, coverage tools, test harness / unit test framework'],
+            ['**Đo & phân tích phi chức năng**', 'Performance testing tools, monitoring tools, dynamic analysis tools'],
+            ['**Nhu cầu đặc thù khác**', 'Tool cho data quality, accessibility, bảo mật, khả chuyển (portability)…'],
+          ],
+          caption: 'Tool được nhóm theo hoạt động test mà nó hỗ trợ — đây là cách ISTQB tổ chức chương này.',
+        },
+        {
+          type: 'callout',
+          variant: 'info',
+          title: 'Lưu ý về defect management',
+          md: 'Công cụ **quản lý defect** (defect / incident management) thuộc nhóm hỗ trợ quản lý test & testware — nó theo dõi defect qua vòng đời, gắn với traceability và báo cáo. Đừng nhầm nó với *test execution tool*.',
+        },
+        {
+          type: 'analogy',
+          emoji: '🧰',
+          title: 'Hộp đồ nghề của thợ',
+          md: 'Cờ-lê dùng để vặn bu-lông, búa để đóng đinh, thước để đo. Không ai dùng búa để đo chiều dài. Test tool cũng vậy — *performance tool* để đo tải, *static analysis tool* để soi code không chạy, *test management tool* để điều phối. Chọn đúng món cho đúng việc.',
+        },
+        { type: 'h2', text: 'Phân biệt 3 “họ tool” hay bị lẫn' },
+        {
+          type: 'list',
+          items: [
+            '**Static analysis tool** — soi *code/tài liệu mà KHÔNG chạy*, tìm vi phạm chuẩn coding, code phức tạp, lỗ hổng tiềm ẩn. Đây là *static testing*.',
+            '**Test execution tool** — *chạy* test object bằng test script đã viết, so sánh kết quả thực tế với kết quả mong đợi (expected results). Đây là *dynamic testing*.',
+            '**Coverage tool** — đo *bao nhiêu phần* của đối tượng (ví dụ % dòng code, % nhánh) đã được test khi chạy.',
+          ],
+        },
+        {
+          type: 'interactive',
+          kind: 'match',
+          title: 'Ghép hoạt động với loại tool',
+          pairs: [
+            { left: 'Theo dõi defect qua vòng đời', right: 'Defect management tool' },
+            { left: 'Soi code mà không cần chạy', right: 'Static analysis tool' },
+            { left: 'Đo % dòng code đã được test', right: 'Coverage tool' },
+            { left: 'Mô phỏng 10.000 user truy cập cùng lúc', right: 'Performance testing tool' },
+            { left: 'Sinh dữ liệu test hàng loạt', right: 'Test data preparation tool' },
+            { left: 'Chạy lại bộ regression script', right: 'Test execution tool' },
+          ],
+        },
+        {
+          type: 'callout',
+          variant: 'exam-trap',
+          title: 'Bẫy: “static” vs “dynamic”',
+          md: 'Đề hay hỏi “tool nào thuộc *static testing*?”. Đáp án là **static analysis tool** (không chạy phần mềm). Còn *test execution / performance / coverage* đều cần **chạy** → thuộc *dynamic testing*. Nhớ: chữ “static” = không thực thi.',
+        },
+        {
+          type: 'checkpoint',
+          questions: [
+            {
+              id: 'ck-6-2-1',
+              type: 'single',
+              k: 'K2',
+              lo: 'FL-6.1.1',
+              stem: 'A tool analyses source code to detect coding standard violations and overly complex code WITHOUT executing the program. Which category does it belong to?',
+              options: [
+                { id: 'a', text: 'Test execution tool' },
+                { id: 'b', text: 'Static analysis tool' },
+                { id: 'c', text: 'Performance testing tool' },
+                { id: 'd', text: 'Coverage tool' },
+              ],
+              correct: ['b'],
+              explanation:
+                'Phân tích code *mà không chạy* để tìm vi phạm chuẩn và độ phức tạp là đặc trưng của **static analysis tool** (hỗ trợ static testing). Các tool còn lại đều cần thực thi phần mềm.',
+              topic: 'tool categories',
+            },
+            {
+              id: 'ck-6-2-2',
+              type: 'single',
+              k: 'K2',
+              lo: 'FL-6.1.1',
+              stem: 'Which type of tool is most suitable for measuring how a system behaves with 5,000 concurrent users?',
+              options: [
+                { id: 'a', text: 'Defect management tool' },
+                { id: 'b', text: 'Static analysis tool' },
+                { id: 'c', text: 'Performance testing tool' },
+                { id: 'd', text: 'Test management tool' },
+              ],
+              correct: ['c'],
+              explanation:
+                'Mô phỏng tải lớn và đo hành vi hệ thống dưới tải là việc của **performance testing tool**. Defect/test management theo dõi và điều phối; static analysis soi code không chạy.',
+              topic: 'tool categories',
+            },
+          ],
+        },
+      ],
+      keyTerms: [
+        { en: 'Static analysis tool', vn: 'Công cụ phân tích tĩnh', def: 'Tool phân tích code/tài liệu mà không thực thi, để tìm vi phạm chuẩn, độ phức tạp, lỗ hổng — hỗ trợ static testing.' },
+        { en: 'Test execution tool', vn: 'Công cụ thực thi test', def: 'Tool chạy test object bằng test script và so sánh kết quả thực tế với kết quả mong đợi — hỗ trợ dynamic testing.' },
+        { en: 'Coverage tool', vn: 'Công cụ đo độ phủ', def: 'Tool đo mức độ phần của đối tượng test đã được kiểm tra (ví dụ % dòng code, % nhánh) khi chạy test.' },
+        { en: 'Performance testing tool', vn: 'Công cụ kiểm thử hiệu năng', def: 'Tool tạo tải/giả lập người dùng và đo hành vi hệ thống (thời gian phản hồi, throughput) dưới tải.' },
+        { en: 'Defect management tool', vn: 'Công cụ quản lý defect', def: 'Tool ghi nhận và theo dõi defect qua toàn bộ vòng đời; hỗ trợ quản lý testware và báo cáo.' },
+      ],
+    },
+
+    /* ── 6.2a ────────────────────────────────────────────────────────────── */
+    {
+      id: 'ch6-l3',
+      slug: 'benefits-and-risks',
+      title: { vn: 'Lợi ích & Rủi ro của Test Automation', en: 'Benefits & Risks of Test Automation' },
+      estMinutes: 8,
+      objectives: ['FL-6.2.1'],
+      hook: 'Tự động hoá test được bán như “viên đạn bạc” — chạy nhanh, không mệt, tìm bug suốt đêm. Sự thật cân bằng hơn nhiều: mỗi lợi ích đi kèm một cái giá. Đây là LO K1 — phải nhớ chính xác cả hai cột.',
+      blocks: [
+        { type: 'lead', md: 'Đây là phần **chắc chắn ra thi**. Mẹo: học theo cặp — đối với mỗi lợi ích, có một rủi ro tương ứng. Đặc biệt lưu ý chi phí **viết và bảo trì** script.' },
+        { type: 'h2', text: 'Lợi ích vs Rủi ro — bảng đối chiếu' },
+        {
+          type: 'table',
+          headers: ['Lợi ích (Benefits)', 'Rủi ro (Risks)'],
+          rows: [
+            ['Giảm công sức **lặp lại** thủ công (chạy regression nhiều lần)', 'Kỳ vọng **phi thực tế** về những gì tool làm được'],
+            ['Phát hiện **nhất quán** các sai khác (kết quả lặp lại được)', '**Đánh giá thấp** thời gian/chi phí/công sức để giới thiệu và *bảo trì* tool'],
+            ['Đánh giá **khách quan** (đo coverage, static metrics)', 'Đánh giá thấp công sức để **bảo trì test asset** sinh ra từ tool'],
+            ['Truy cập thông tin test **dễ hơn** (biểu đồ, thống kê cho giám sát/báo cáo)', 'Lệ thuộc/“khoá” vào **nhà cung cấp** (vendor lock-in); tool bị bỏ hỗ trợ'],
+            ['', 'Dùng tool nguồn mở (open-source) **thiếu hỗ trợ/cộng đồng yếu**, có thể ngừng phát triển'],
+            ['', 'Tool **không tương thích** với nền tảng phát triển'],
+          ],
+          caption: 'Học theo cặp: mỗi lợi ích có cái giá đi kèm. Cột rủi ro thường bị lãng quên khi “lên dây cót” mua tool.',
+        },
+        {
+          type: 'analogy',
+          emoji: '🏎️',
+          title: 'Mua siêu xe ≠ thắng đua',
+          md: 'Một chiếc xe đua đắt tiền có thể đi 300 km/h — nhưng cần tay lái giỏi, đội bảo dưỡng, và *tiền xăng + thay lốp* liên tục. Mua tool automation cũng vậy: chi phí mua chỉ là phần nổi; *bảo trì script* mỗi khi UI/đặc tả thay đổi mới là phần chìm tốn kém.',
+        },
+        {
+          type: 'callout',
+          variant: 'warn',
+          title: 'Chi phí bảo trì — kẻ giết âm thầm',
+          md: 'Mỗi khi giao diện đổi, luồng nghiệp vụ đổi, hay test object thay đổi, **automation script phải được cập nhật**. Nếu chi phí bảo trì vượt quá lợi ích chạy nhanh, bộ test tự động có thể *lỗ vốn*. Đây là lý do số 1 khiến nhiều dự án automation thất bại.',
+        },
+        {
+          type: 'callout',
+          variant: 'exam-trap',
+          title: 'Bẫy: “automation là một lần đầu tư”',
+          md: 'SAI. Automation **không phải chi phí một lần**. Có chi phí ban đầu (giới thiệu tool, viết script) *và* chi phí định kỳ (bảo trì script, cập nhật, hạ tầng). Đề thích phương án ngụ ý automation “miễn phí sau khi viết xong” — luôn là bẫy.',
+        },
+        {
+          type: 'interactive',
+          kind: 'sort',
+          title: 'Lợi ích hay Rủi ro?',
+          prompt: 'Phân loại mỗi phát biểu về test automation.',
+          buckets: ['Lợi ích', 'Rủi ro'],
+          items: [
+            { label: 'Giảm công lặp lại khi chạy regression', correctBucket: 'Lợi ích' },
+            { label: 'Đánh giá khách quan qua coverage metrics', correctBucket: 'Lợi ích' },
+            { label: 'Kết quả nhất quán, lặp lại được', correctBucket: 'Lợi ích' },
+            { label: 'Đánh giá thấp chi phí bảo trì script', correctBucket: 'Rủi ro' },
+            { label: 'Kỳ vọng phi thực tế về năng lực của tool', correctBucket: 'Rủi ro' },
+            { label: 'Lệ thuộc vào nhà cung cấp (vendor lock-in)', correctBucket: 'Rủi ro' },
+          ],
+        },
+        {
+          type: 'checkpoint',
+          questions: [
+            {
+              id: 'ck-6-3-1',
+              type: 'single',
+              k: 'K1',
+              lo: 'FL-6.2.1',
+              stem: 'Which of the following is a RISK of test automation?',
+              options: [
+                { id: 'a', text: 'More consistent and repeatable execution of tests' },
+                { id: 'b', text: 'Underestimating the effort needed to maintain the test automation' },
+                { id: 'c', text: 'Objective assessment via coverage metrics' },
+                { id: 'd', text: 'Easier access to test information for reporting' },
+              ],
+              correct: ['b'],
+              explanation:
+                'Đánh giá thấp công sức **bảo trì** automation là một rủi ro điển hình. Ba phương án còn lại đều là *lợi ích* của test automation.',
+              topic: 'automation risks',
+            },
+            {
+              id: 'ck-6-3-2',
+              type: 'truefalse',
+              k: 'K1',
+              lo: 'FL-6.2.1',
+              stem: 'Once an automated test script is written, it requires essentially no further effort to keep it working.',
+              correct: ['false'],
+              explanation:
+                'Sai. Script automation cần được **bảo trì liên tục** khi test object, UI hay đặc tả thay đổi. Bỏ qua chi phí này là một trong những rủi ro lớn nhất của automation.',
+              topic: 'automation risks',
+            },
+          ],
+        },
+      ],
+      keyTerms: [
+        { en: 'Maintenance cost (of automation)', vn: 'Chi phí bảo trì (automation)', def: 'Công sức định kỳ để cập nhật automation script khi test object/UI/đặc tả thay đổi; thường bị đánh giá thấp.' },
+        { en: 'Vendor lock-in', vn: 'Lệ thuộc nhà cung cấp', def: 'Rủi ro phụ thuộc vào một nhà cung cấp tool cụ thể, khó chuyển đổi nếu tool tăng giá, đổi hướng hoặc ngừng hỗ trợ.' },
+        { en: 'Test asset', vn: 'Tài sản kiểm thử', def: 'Các sản phẩm sinh ra/được dùng cùng tool (script, dữ liệu, cấu hình) — cần công sức để bảo trì.' },
+      ],
+    },
+
+    /* ── 6.x ─────────────────────────────────────────────────────────────── */
+    {
+      id: 'ch6-l4',
+      slug: 'tool-mindset',
+      title: { vn: 'Tool không thay thế tư duy test', en: 'Tools Don’t Replace Thinking' },
+      estMinutes: 5,
+      objectives: ['FL-6.1.1', 'FL-6.2.1'],
+      hook: 'Đây là “linh hồn” của cả chương — và là loại câu hỏi mà đề ISTQB rất thích cài bẫy: tool là *trợ thủ*, không phải *chủ tướng*.',
+      blocks: [
+        { type: 'lead', md: 'Nếu chỉ nhớ một câu từ Chương 6, hãy nhớ câu này: **công cụ hỗ trợ con người, chứ không thay thế con người**. Mọi đáp án phóng đại năng lực của tool đều đáng nghi.' },
+        { type: 'h2', text: 'Ba sự thật cần khắc cốt ghi tâm' },
+        {
+          type: 'list',
+          ordered: true,
+          items: [
+            '**Tool gánh phần lặp lại, không gánh phần tư duy.** Việc quyết định *test cái gì, ưu tiên rủi ro nào, đánh giá kết quả có hợp lý không* vẫn là của tester.',
+            '**Automation tốt cần test thiết kế tốt trước.** Tự động hoá một bộ test kém chỉ tạo ra “sự kém tốc độ cao”.',
+            '**Lợi ích của tool không tự đến.** Cần kỹ năng, chi phí và bảo trì liên tục; nếu không, tool có thể thành gánh nặng thay vì đòn bẩy.',
+          ],
+        },
+        {
+          type: 'quote',
+          md: 'A fool with a tool is still a fool — chỉ là một kẻ ngốc *làm việc nhanh hơn*.',
+          who: 'Châm ngôn ngành test',
+        },
+        {
+          type: 'analogy',
+          emoji: '🧭',
+          title: 'GPS không lái xe thay bạn',
+          md: 'GPS chỉ đường rất giỏi, nhưng nếu bạn tắt não và rẽ xuống sông vì “GPS bảo thế” thì lỗi là ở bạn. Tester dùng tool cần *tư duy phản biện* để biết khi nào tin tool, khi nào nghi ngờ kết quả.',
+        },
+        {
+          type: 'callout',
+          variant: 'principle',
+          title: 'Nguyên tắc vàng của Chương 6',
+          md: 'Tool là **đòn bẩy cho năng lực test sẵn có**. Nó khuếch đại một đội test tốt, và cũng khuếch đại sự lộn xộn của một đội test kém. Đầu tư vào tư duy test trước, tool sau.',
+        },
+        {
+          type: 'checkpoint',
+          questions: [
+            {
+              id: 'ck-6-4-1',
+              type: 'single',
+              k: 'K2',
+              lo: 'FL-6.1.1',
+              stem: 'Which statement best reflects the proper role of test tools?',
+              options: [
+                { id: 'a', text: 'Tools replace the need for skilled testers' },
+                { id: 'b', text: 'Tools support testers but do not replace human judgement and analysis' },
+                { id: 'c', text: 'Tools make test design unnecessary' },
+                { id: 'd', text: 'Tools guarantee that all important defects are found' },
+              ],
+              correct: ['b'],
+              explanation:
+                'Tool *hỗ trợ* tester, không thay thế tư duy/phân tích của con người. Các phương án còn lại đều phóng đại năng lực của tool — kiểu bẫy ISTQB rất ưa dùng.',
+              topic: 'tool mindset',
+            },
+          ],
+        },
+        {
+          type: 'flashcards',
+          cards: [
+            { front: 'Tool có thay thế tư duy test không?', back: 'KHÔNG. Tool hỗ trợ và khuếch đại; con người vẫn quyết định test cái gì và đánh giá kết quả.' },
+            { front: 'Chi phí lớn nhất hay bị quên của automation?', back: 'Chi phí **bảo trì** script khi test object/UI/đặc tả thay đổi.' },
+            { front: 'Tự động hoá bộ test kém cho ra gì?', back: 'Một bộ test kém… chạy nhanh hơn. Automation không sửa được thiết kế tồi.' },
+          ],
+        },
+      ],
+      keyTerms: [
+        { en: 'Critical thinking', vn: 'Tư duy phản biện', def: 'Khả năng đánh giá kết quả của tool một cách có hệ thống — biết khi nào tin, khi nào nghi ngờ; tool không thay thế được điều này.' },
+        { en: 'Tool as leverage', vn: 'Tool như đòn bẩy', def: 'Quan điểm rằng tool khuếch đại năng lực test sẵn có chứ không tự tạo ra chất lượng test.' },
+      ],
+    },
+  ],
+
+  quiz: [
+    {
+      id: 'q6-1', type: 'single', k: 'K2', lo: 'FL-6.1.1',
+      stem: 'How are test tools classified in the ISTQB syllabus?',
+      options: [
+        { id: 'a', text: 'By their commercial vendor and price' },
+        { id: 'b', text: 'By the test activity they support' },
+        { id: 'c', text: 'By the programming language they are written in' },
+        { id: 'd', text: 'By the operating system they run on' },
+      ],
+      correct: ['b'],
+      explanation: 'ISTQB phân loại test tool **theo hoạt động test mà chúng hỗ trợ** (quản lý test, static testing, thiết kế/dữ liệu, thực thi/coverage, hiệu năng…), không theo vendor, ngôn ngữ hay OS.',
+      topic: 'tool categories',
+    },
+    {
+      id: 'q6-2', type: 'single', k: 'K2', lo: 'FL-6.1.1',
+      stem: 'Which tool type supports STATIC testing?',
+      options: [
+        { id: 'a', text: 'Test execution tool' },
+        { id: 'b', text: 'Performance testing tool' },
+        { id: 'c', text: 'Static analysis tool' },
+        { id: 'd', text: 'Coverage tool' },
+      ],
+      correct: ['c'],
+      explanation: 'Static analysis tool soi code/tài liệu **mà không chạy** → hỗ trợ static testing. Các tool còn lại đều cần thực thi phần mềm (dynamic testing).',
+      topic: 'static vs dynamic',
+    },
+    {
+      id: 'q6-3', type: 'single', k: 'K1', lo: 'FL-6.2.1',
+      stem: 'Which of the following is a BENEFIT of test automation?',
+      options: [
+        { id: 'a', text: 'It eliminates all manual testing forever' },
+        { id: 'b', text: 'It reduces repetitive manual test execution effort' },
+        { id: 'c', text: 'It removes the need to maintain test scripts' },
+        { id: 'd', text: 'It guarantees the discovery of all defects' },
+      ],
+      correct: ['b'],
+      explanation: 'Giảm công sức chạy test lặp lại là lợi ích cốt lõi. Automation không loại bỏ hoàn toàn manual testing, vẫn cần bảo trì script, và không bảo đảm tìm hết defect.',
+      topic: 'automation benefits',
+    },
+    {
+      id: 'q6-4', type: 'single', k: 'K1', lo: 'FL-6.2.1',
+      stem: 'Which of the following is a RISK of test automation?',
+      options: [
+        { id: 'a', text: 'More consistent, repeatable test execution' },
+        { id: 'b', text: 'Objective assessment via metrics' },
+        { id: 'c', text: 'Underestimating the cost of maintaining the automation' },
+        { id: 'd', text: 'Easier access to test statistics for reporting' },
+      ],
+      correct: ['c'],
+      explanation: 'Đánh giá thấp chi phí **bảo trì** automation là rủi ro điển hình. Ba phương án còn lại là lợi ích của automation.',
+      topic: 'automation risks',
+    },
+    {
+      id: 'q6-5', type: 'single', k: 'K2', lo: 'FL-6.1.1',
+      stem: 'A team needs a tool to track defects through their entire lifecycle and link them to test results. Which tool category fits best?',
+      options: [
+        { id: 'a', text: 'Coverage tool' },
+        { id: 'b', text: 'Defect management tool' },
+        { id: 'c', text: 'Performance testing tool' },
+        { id: 'd', text: 'Static analysis tool' },
+      ],
+      correct: ['b'],
+      explanation: 'Theo dõi defect qua vòng đời và liên kết với kết quả test là chức năng của **defect management tool** (thuộc nhóm quản lý test & testware).',
+      topic: 'tool categories',
+    },
+    {
+      id: 'q6-6', type: 'single', k: 'K2', lo: 'FL-6.1.1',
+      stem: 'Which statement about test tools is CORRECT?',
+      options: [
+        { id: 'a', text: 'Tools replace the tester’s judgement about what to test' },
+        { id: 'b', text: 'Tools automatically guarantee adequate test coverage' },
+        { id: 'c', text: 'Tools support test activities but do not replace human thinking' },
+        { id: 'd', text: 'Automating any test suite always pays off' },
+      ],
+      correct: ['c'],
+      explanation: 'Tool *hỗ trợ* hoạt động test nhưng không thay thế tư duy con người. Các phương án còn lại đều phóng đại năng lực tool — bẫy quen thuộc.',
+      topic: 'tool mindset',
+    },
+    {
+      id: 'q6-7', type: 'single', k: 'K2', lo: 'FL-6.1.1',
+      stem: 'Which tool would you use to determine the percentage of code lines exercised by a test run?',
+      options: [
+        { id: 'a', text: 'Coverage tool' },
+        { id: 'b', text: 'Defect management tool' },
+        { id: 'c', text: 'Test management tool' },
+        { id: 'd', text: 'Static analysis tool' },
+      ],
+      correct: ['a'],
+      explanation: 'Đo % phần đối tượng đã được test (ví dụ % dòng code/nhánh) khi chạy là việc của **coverage tool**.',
+      topic: 'tool categories',
+    },
+    {
+      id: 'q6-8', type: 'truefalse', k: 'K1', lo: 'FL-6.2.1',
+      stem: 'Test automation always reduces total testing cost.',
+      correct: ['false'],
+      explanation: 'Sai. Automation có chi phí ban đầu (tool, viết script) và chi phí bảo trì định kỳ. Nếu bảo trì vượt lợi ích, tổng chi phí có thể *tăng*.',
+      topic: 'automation risks',
+    },
+    {
+      id: 'q6-9', type: 'multi', k: 'K1', lo: 'FL-6.2.1',
+      stem: 'Which of the following are RISKS of test automation? (Choose TWO)',
+      options: [
+        { id: 'a', text: 'Unrealistic expectations of what the tool can do' },
+        { id: 'b', text: 'Consistent and repeatable test execution' },
+        { id: 'c', text: 'Over-reliance on a tool vendor (vendor lock-in)' },
+        { id: 'd', text: 'Objective assessment of coverage' },
+      ],
+      correct: ['a', 'c'],
+      explanation: 'Kỳ vọng phi thực tế và lệ thuộc nhà cung cấp là *rủi ro*. Nhất quán/lặp lại và đánh giá khách quan coverage là *lợi ích*.',
+      topic: 'automation risks',
+    },
+    {
+      id: 'q6-10', type: 'single', k: 'K2', lo: 'FL-6.1.1',
+      stem: 'Which of the following is a tool that supports the management of testware and the test process?',
+      options: [
+        { id: 'a', text: 'Static analysis tool' },
+        { id: 'b', text: 'Test management / application lifecycle management tool' },
+        { id: 'c', text: 'Performance testing tool' },
+        { id: 'd', text: 'Test execution tool' },
+      ],
+      correct: ['b'],
+      explanation: 'Test management / ALM tool hỗ trợ điều phối, lập kế hoạch và quản lý testware. Các tool còn lại hỗ trợ static testing, đo hiệu năng và thực thi test.',
+      topic: 'tool categories',
+    },
+    {
+      id: 'q6-11', type: 'single', k: 'K2', lo: 'FL-6.2.1',
+      stem: 'Why is automating a poorly designed test suite generally a bad idea?',
+      options: [
+        { id: 'a', text: 'Because automation always finds fewer defects than manual testing' },
+        { id: 'b', text: 'Because it makes the weak tests run faster without improving their quality' },
+        { id: 'c', text: 'Because tools cannot execute scripts' },
+        { id: 'd', text: 'Because regression testing should never be automated' },
+      ],
+      correct: ['b'],
+      explanation: 'Automation chỉ giúp *chạy nhanh và lặp lại*; nó không cải thiện thiết kế test. Một bộ test kém khi tự động hoá vẫn kém — chỉ chạy nhanh hơn.',
+      topic: 'tool mindset',
+    },
+    {
+      id: 'q6-12', type: 'single', k: 'K1', lo: 'FL-6.2.1',
+      stem: 'Which factor is most commonly UNDERESTIMATED when introducing test automation?',
+      options: [
+        { id: 'a', text: 'The speed of test execution' },
+        { id: 'b', text: 'The effort to maintain test scripts and assets over time' },
+        { id: 'c', text: 'The ability to run tests overnight' },
+        { id: 'd', text: 'The consistency of automated execution' },
+      ],
+      correct: ['b'],
+      explanation: 'Công sức **bảo trì** script và test asset theo thời gian là yếu tố hay bị đánh giá thấp nhất, và là nguyên nhân hàng đầu khiến automation thất bại.',
+      topic: 'automation risks',
+    },
+    {
+      id: 'q6-13', type: 'single', k: 'K2', lo: 'FL-6.1.1',
+      stem: 'A test execution tool primarily works by:',
+      options: [
+        { id: 'a', text: 'Analysing source code without executing it' },
+        { id: 'b', text: 'Running the test object using scripts and comparing actual results with expected results' },
+        { id: 'c', text: 'Tracking requirements and their changes' },
+        { id: 'd', text: 'Measuring response times under heavy load' },
+      ],
+      correct: ['b'],
+      explanation: 'Test execution tool *chạy* test object theo script và so sánh kết quả thực tế với kết quả mong đợi. Phân tích code không chạy là static analysis; đo tải là performance tool.',
+      topic: 'tool categories',
+    },
+  ],
+}
+
+export default ch6

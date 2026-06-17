@@ -1,0 +1,202 @@
+/* Chapter 3 — Static Testing: supplementary practice questions (CTFL v4.0 §3) */
+
+export default [
+  {
+    id: "q3x-1",
+    type: "single",
+    k: "K2",
+    lo: "FL-3.1.1",
+    topic: "reviewable work products",
+    stem: "A team is deciding which artefacts can be subjected to static testing. Which of the following CANNOT be examined by static testing?",
+    options: [
+      { id: "a", text: "A user story together with its acceptance criteria" },
+      { id: "b", text: "A tester's undocumented idea for a new test approach that exists only in their head" },
+      { id: "c", text: "A test automation script written in a scripting language" },
+      { id: "d", text: "A contract written in structured natural language" },
+    ],
+    correct: ["b"],
+    explanation:
+      "Static testing chỉ áp dụng được cho work product mà con người hoặc công cụ ĐỌC VÀ HIỂU được. Một ý tưởng còn trong đầu, chưa viết ra (b), không phải là work product nên không thể review/phân tích tĩnh. User story + acceptance criteria (a), test script (c) và hợp đồng viết bằng ngôn ngữ có cấu trúc (d) đều là tài liệu đọc được nên đều static test được.",
+  },
+  {
+    id: "q3x-2",
+    type: "multi",
+    k: "K2",
+    lo: "FL-3.1.2",
+    topic: "value of static testing",
+    stem: "Which of the following are benefits that static testing can provide that dynamic testing typically cannot? (Choose TWO)",
+    options: [
+      { id: "a", text: "Detecting contradictions and ambiguities directly in the requirements" },
+      { id: "b", text: "Measuring the response time of the running system under load" },
+      { id: "c", text: "Improving communication between stakeholders who participate in reviews" },
+      { id: "d", text: "Observing the actual runtime behaviour of the integrated system" },
+    ],
+    correct: ["a", "c"],
+    explanation:
+      "Static testing đọc trực tiếp work product nên bắt được mâu thuẫn/mơ hồ trong requirement (a) mà dynamic không phơi bày được, và việc nhiều bên cùng tham gia review giúp cải thiện giao tiếp (c). (b) đo hiệu năng runtime và (d) quan sát hành vi khi chạy đều CHỈ làm được bằng dynamic testing vì cần thực thi phần mềm.",
+  },
+  {
+    id: "q3x-3",
+    type: "truefalse",
+    k: "K2",
+    lo: "FL-3.1.2",
+    topic: "value of static testing",
+    stem: "A key benefit of static testing is that, because defects are removed before code is written, it guarantees that no defects will remain in the delivered software.",
+    correct: ["false"],
+    explanation:
+      "Sai. Static testing giúp phát hiện và loại bỏ defect SỚM và RẺ, tăng năng suất và giảm chi phí, nhưng KHÔNG bao giờ đảm bảo phần mềm hết lỗi — đây là một dạng bẫy lặp lại nguyên lý 'testing shows the presence, not the absence of defects'. Đáp án đúng phải là false.",
+  },
+  {
+    id: "q3x-4",
+    type: "single",
+    k: "K2",
+    lo: "FL-3.1.3",
+    topic: "static vs dynamic",
+    stem: "A reviewer reads through a module's source code and notices a block of code that can never be executed because of a preceding unconditional return. How is this best characterised?",
+    options: [
+      { id: "a", text: "A failure found by dynamic testing" },
+      { id: "b", text: "A defect found by static testing" },
+      { id: "c", text: "An error made by the user during execution" },
+      { id: "d", text: "A failure that can only be revealed by executing the code" },
+    ],
+    correct: ["b"],
+    explanation:
+      "Unreachable code được phát hiện bằng cách ĐỌC code mà không chạy — đó là static testing, và thứ tìm được là DEFECT trực tiếp, không phải failure. (a) và (d) sai vì không có việc thực thi; (c) sai vì đây không phải lỗi do con người gây ra khi vận hành mà là khiếm khuyết trong code.",
+  },
+  {
+    id: "q3x-5",
+    type: "single",
+    k: "K2",
+    lo: "FL-3.1.3",
+    topic: "static vs dynamic",
+    stem: "Which statement about the relationship between static testing and dynamic testing is CORRECT?",
+    options: [
+      { id: "a", text: "They are mutually exclusive: using one means the other should not be used" },
+      { id: "b", text: "They are complementary, finding different kinds of defects, and both aim to improve quality" },
+      { id: "c", text: "Dynamic testing always finds the same defects as static testing, so static testing is optional" },
+      { id: "d", text: "Static testing can only be applied to code, while dynamic testing applies to all work products" },
+    ],
+    correct: ["b"],
+    explanation:
+      "Static và dynamic testing BỔ TRỢ cho nhau: mỗi bên bắt loại defect mà bên kia khó thấy, và cả hai cùng hướng tới cải thiện chất lượng (b). (a) sai vì chúng không loại trừ nhau; (c) sai vì hai bên tìm các defect khác nhau; (d) đảo ngược thực tế — static áp dụng cho nhiều work product (cả requirement, design), dynamic chỉ cho thứ chạy được.",
+  },
+  {
+    id: "q3x-6",
+    type: "single",
+    k: "K1",
+    lo: "FL-3.2.1",
+    topic: "early feedback",
+    stem: "In an Agile project, the team demonstrates a partially built feature to stakeholders at the end of each iteration. What is the PRIMARY value of this early and frequent feedback?",
+    options: [
+      { id: "a", text: "It allows the team to skip writing acceptance criteria" },
+      { id: "b", text: "It helps confirm the team is building what stakeholders actually need and reduces costly rework" },
+      { id: "c", text: "It replaces the need for any further dynamic testing of the feature" },
+      { id: "d", text: "It guarantees that all stakeholders will sign off on the final release" },
+    ],
+    correct: ["b"],
+    explanation:
+      "Phản hồi sớm & thường xuyên giúp xác nhận nhóm đang xây đúng thứ stakeholder cần, phát hiện hiểu lầm ngay để tránh rework đắt đỏ (b). Nó không cho phép bỏ acceptance criteria (a), không thay thế dynamic testing (c) và không 'đảm bảo' mọi bên sẽ ký duyệt (d).",
+  },
+  {
+    id: "q3x-7",
+    type: "single",
+    k: "K2",
+    lo: "FL-3.2.2",
+    topic: "review process",
+    stem: "During the 'review initiation' activity of the generic review process, which of the following tasks is performed?",
+    options: [
+      { id: "a", text: "Defining the entry and exit criteria for a formal review" },
+      { id: "b", text: "Distributing the work product and explaining the scope and objectives to the participants" },
+      { id: "c", text: "Each reviewer individually examining the work product to log anomalies" },
+      { id: "d", text: "Deciding whether each anomaly is a defect that must be fixed" },
+    ],
+    correct: ["b"],
+    explanation:
+      "Review initiation lo việc CHUẨN BỊ: phân phối work product cùng tài liệu liên quan, giải thích scope/mục tiêu/quy trình và giải đáp thắc mắc cho người tham gia (b). Định nghĩa entry/exit criteria thuộc Planning (a); rà soát cá nhân thuộc Individual review (c); quyết định anomaly có là defect không thuộc Communication & analysis (d).",
+  },
+  {
+    id: "q3x-8",
+    type: "single",
+    k: "K2",
+    lo: "FL-3.2.2",
+    topic: "review process",
+    stem: "A formal review has just finished: defect reports have been raised, defects fixed by the author, metrics collected and the exit criteria checked so the work product can be accepted. To which review activity do these tasks belong?",
+    options: [
+      { id: "a", text: "Planning" },
+      { id: "b", text: "Individual review" },
+      { id: "c", text: "Communication and analysis" },
+      { id: "d", text: "Fixing and reporting" },
+    ],
+    correct: ["d"],
+    explanation:
+      "Tạo defect report, sửa defect (thường do author), thu metric, kiểm tra exit criteria và chấp nhận work product đều thuộc hoạt động CUỐI — Fixing and reporting (d). Planning đặt scope/tiêu chí; Individual review chỉ ghi anomaly; Communication & analysis quyết định anomaly nào là defect, chưa thực hiện sửa và chốt exit criteria.",
+  },
+  {
+    id: "q3x-9",
+    type: "single",
+    k: "K1",
+    lo: "FL-3.2.3",
+    topic: "review roles",
+    stem: "According to ISTQB CTFL v4.0, which role decides WHAT is to be reviewed and allocates the necessary resources such as people, budget and time?",
+    options: [
+      { id: "a", text: "The review leader" },
+      { id: "b", text: "The moderator" },
+      { id: "c", text: "The manager" },
+      { id: "d", text: "The scribe" },
+    ],
+    correct: ["c"],
+    explanation:
+      "Theo CTFL v4.0, MANAGER quyết định CÁI GÌ được đem review và cấp nguồn lực (người, thời gian, ngân sách) (c). Đừng nhầm với review leader — vai này chịu trách nhiệm TỔNG THỂ và tổ chức (ai tham gia, khi nào, ở đâu) (a). Moderator điều phối buổi họp (b); scribe ghi chép anomaly (d).",
+  },
+  {
+    id: "q3x-10",
+    type: "multi",
+    k: "K2",
+    lo: "FL-3.2.3",
+    topic: "review roles",
+    stem: "In a review, a participant guides the meeting to keep it productive, stays neutral and mediates when two reviewers disagree, while another participant captures all the anomalies and decisions raised. Which TWO role assignments are correct?",
+    options: [
+      { id: "a", text: "Facilitating and mediating is the moderator's responsibility" },
+      { id: "b", text: "Capturing anomalies and decisions is the scribe's responsibility" },
+      { id: "c", text: "Facilitating and mediating is the author's responsibility" },
+      { id: "d", text: "Capturing anomalies and decisions is the manager's responsibility" },
+    ],
+    correct: ["a", "b"],
+    explanation:
+      "Điều phối buổi họp, giữ trung lập và hoà giải bất đồng là việc của MODERATOR/facilitator (a); ghi lại các anomaly và quyết định là việc của SCRIBE/recorder (b). (c) sai vì author là người tạo/sửa work product chứ không điều phối; (d) sai vì manager quyết định cái gì được review và cấp nguồn lực, không phải người ghi chép trong buổi họp.",
+  },
+  {
+    id: "q3x-11",
+    type: "single",
+    k: "K2",
+    lo: "FL-3.2.4",
+    topic: "review types",
+    stem: "A group of technical peers examines a design document to evaluate its quality, reach consensus on technical decisions, and identify anomalies; individual preparation is recommended and the meeting is ideally led by a moderator rather than the author. Which review type is this?",
+    options: [
+      { id: "a", text: "Walkthrough" },
+      { id: "b", text: "Technical review" },
+      { id: "c", text: "Informal review" },
+      { id: "d", text: "Inspection" },
+    ],
+    correct: ["b"],
+    explanation:
+      "Đặc trưng 'do các chuyên gia kỹ thuật (peers) thực hiện, hướng tới ĐỒNG THUẬN và quyết định kỹ thuật, lý tưởng do moderator (không phải author) dẫn, chuẩn bị cá nhân là khuyến nghị' chính là TECHNICAL REVIEW (b). Walkthrough do AUTHOR dẫn (a); informal không có cấu trúc như vậy (c); inspection formal nhất, bắt buộc chuẩn bị cá nhân và thu metric theo rules/checklist (d).",
+  },
+  {
+    id: "q3x-12",
+    type: "single",
+    k: "K2",
+    lo: "FL-3.2.4",
+    topic: "review types",
+    stem: "Which statement about review types is CORRECT?",
+    options: [
+      { id: "a", text: "An inspection is led by the author of the work product" },
+      { id: "b", text: "An informal review does not require the results to be documented" },
+      { id: "c", text: "A walkthrough always collects metrics and enforces entry and exit criteria" },
+      { id: "d", text: "A more formal review type is always better than a less formal one" },
+    ],
+    correct: ["b"],
+    explanation:
+      "Informal review là loại ít formal nhất và KHÔNG bắt buộc tài liệu hoá kết quả (b) — đúng. (a) sai vì inspection do MODERATOR dẫn, không phải author (author dẫn là walkthrough); (c) sai vì thu metric + entry/exit criteria là đặc trưng của inspection chứ không phải walkthrough; (d) sai vì mức formal cao hơn không tự động 'tốt hơn' — chọn loại review theo mục tiêu và rủi ro.",
+  },
+]

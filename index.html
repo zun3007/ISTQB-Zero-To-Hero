@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#7c5cff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e0b16" media="(prefers-color-scheme: dark)" />
+    <meta
+      name="description"
+      content="ISTQB Zero → Hero: học Certified Tester Foundation Level (CTFL v4.0) bằng micro-learning tương tác, song ngữ, hoàn toàn offline."
+    />
+    <title>ISTQB Zero → Hero · CTFL v4.0</title>
+    <!-- No-flash theme: apply saved/system theme before first paint -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('istqb.theme');
+          var dark =
+            saved === 'dark' ||
+            (!saved &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

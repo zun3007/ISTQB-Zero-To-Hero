@@ -1,0 +1,667 @@
+/* Chapter 1 — Fundamentals of Testing (CTFL v4.0 §1) */
+
+const ch1 = {
+  id: 'ch1',
+  number: 1,
+  slug: 'fundamentals-of-testing',
+  title: { vn: 'Nền tảng của Kiểm thử', en: 'Fundamentals of Testing' },
+  tagline: 'Bắt đầu từ câu hỏi “Kiểm thử thật ra là gì?”',
+  bigIdea:
+    'Kiểm thử không phải là “bấm thử xem có lỗi không”. Nó là một hoạt động có mục tiêu, có nguyên lý, giúp đo lường chất lượng và giảm rủi ro — từ rất sớm, không phải phút chót.',
+  estMinutes: 55,
+  accent: 'brand',
+  icon: 'compass',
+  objectives: [
+    { code: 'FL-1.1.1', k: 'K1', text: 'Nhận diện các mục tiêu điển hình của kiểm thử' },
+    { code: 'FL-1.1.2', k: 'K2', text: 'Phân biệt testing với debugging' },
+    { code: 'FL-1.2.1', k: 'K2', text: 'Lấy ví dụ vì sao kiểm thử là cần thiết' },
+    { code: 'FL-1.2.2', k: 'K1', text: 'Nhớ mối quan hệ giữa testing và quality assurance' },
+    { code: 'FL-1.2.3', k: 'K2', text: 'Phân biệt root cause, error, defect và failure' },
+    { code: 'FL-1.3.1', k: 'K2', text: 'Giải thích 7 nguyên lý kiểm thử' },
+    { code: 'FL-1.4.1', k: 'K2', text: 'Tóm tắt các hoạt động và nhiệm vụ kiểm thử' },
+    { code: 'FL-1.4.2', k: 'K2', text: 'Giải thích tác động của ngữ cảnh lên quy trình test' },
+    { code: 'FL-1.4.3', k: 'K2', text: 'Phân biệt các loại testware' },
+    { code: 'FL-1.4.4', k: 'K2', text: 'Giải thích giá trị của traceability' },
+    { code: 'FL-1.4.5', k: 'K2', text: 'So sánh các vai trò trong kiểm thử' },
+    { code: 'FL-1.5.1', k: 'K2', text: 'Nêu ví dụ các kỹ năng cần có của tester' },
+    { code: 'FL-1.5.2', k: 'K1', text: 'Nhớ lợi ích của whole-team approach' },
+    { code: 'FL-1.5.3', k: 'K2', text: 'Phân biệt lợi và hại của tính độc lập trong kiểm thử' },
+  ],
+
+  lessons: [
+    /* ── 1.1 ─────────────────────────────────────────────────────────────── */
+    {
+      id: 'ch1-l1',
+      slug: 'what-is-testing',
+      title: { vn: 'Kiểm thử là gì?', en: 'What is Testing?' },
+      estMinutes: 11,
+      objectives: ['FL-1.1.1', 'FL-1.1.2'],
+      hook: 'Hầu hết mọi người nghĩ test = “tìm bug”. Đúng, nhưng đó mới là một nửa câu chuyện.',
+      blocks: [
+        { type: 'lead', md: 'Nếu chỉ định nghĩa kiểm thử là “tìm lỗi”, bạn sẽ trả lời sai một loạt câu trong đề ISTQB. Hãy bắt đầu bằng định nghĩa chuẩn.' },
+        {
+          type: 'callout',
+          variant: 'definition',
+          title: 'Software testing',
+          md: 'Một tập hợp các hoạt động nhằm **phát hiện defect** và **đánh giá chất lượng** của các work product phần mềm. Nó vừa **động** (dynamic — chạy phần mềm) vừa **tĩnh** (static — review tài liệu, code mà không chạy).',
+        },
+        { type: 'h2', text: 'Test ≠ chỉ là chạy phần mềm' },
+        { type: 'p', md: 'Một hiểu lầm kinh điển: kiểm thử là *chạy* phần mềm. Thực tế, **dynamic testing** (chạy) chỉ là một phần. Phần còn lại là **static testing** — review, walkthrough, phân tích tĩnh — và cả các hoạt động *kế hoạch, phân tích, thiết kế, báo cáo*.' },
+        {
+          type: 'analogy',
+          emoji: '🏗️',
+          title: 'Tester như kỹ sư giám sát công trình',
+          md: 'Họ không chỉ gõ vào tường xem có rỗng không (chạy thử), mà còn đọc bản vẽ, kiểm tra vật liệu, đối chiếu tiêu chuẩn *trước khi* đổ bê tông. Tìm lỗi trên bản vẽ rẻ hơn đập tường rất nhiều.',
+        },
+        { type: 'h2', text: 'Các mục tiêu điển hình của kiểm thử' },
+        { type: 'p', md: 'ISTQB liệt kê nhiều **test objectives**. Đề thi hay hỏi “mục tiêu nào KHÔNG phải của testing” — nên nắm danh sách này:' },
+        {
+          type: 'list',
+          items: [
+            'Đánh giá work product: requirements, user stories, design, code',
+            'Kích hoạt **failure** và tìm **defect**',
+            'Bảo đảm độ phủ (coverage) cần thiết của đối tượng test',
+            'Giảm mức độ **rủi ro** về chất lượng phần mềm',
+            'Xác minh các yêu cầu đã được đáp ứng (verification & validation)',
+            'Tuân thủ hợp đồng, luật định hoặc tiêu chuẩn quy định',
+            'Cung cấp thông tin để **các bên ra quyết định**',
+            'Tạo dựng niềm tin vào mức chất lượng của đối tượng test',
+          ],
+        },
+        {
+          type: 'callout',
+          variant: 'info',
+          md: 'Mục tiêu cụ thể **phụ thuộc ngữ cảnh**: dự án Agile sớm chú trọng phản hồi nhanh, dự án tuân thủ chú trọng bằng chứng và traceability. Không có một bộ mục tiêu “đúng cho mọi nơi”.',
+        },
+        { type: 'h2', text: 'Testing vs Debugging' },
+        { type: 'p', md: 'Đây là một LO **K2** rất hay ra thi. Hai việc này khác nhau và thường do **những người khác nhau** thực hiện:' },
+        {
+          type: 'table',
+          headers: ['', 'Testing', 'Debugging'],
+          rows: [
+            ['Mục đích', 'Phát hiện **failure** do defect gây ra', 'Tìm, phân tích & **sửa** defect'],
+            ['Ai làm', 'Tester (thường)', 'Developer (thường)'],
+            ['Đầu ra', 'Bằng chứng có vấn đề (failure)', 'Nguyên nhân được khắc phục'],
+            ['Sau đó', '→ chuyển cho dev debug', '→ chạy **confirmation testing** để xác nhận đã sửa'],
+          ],
+          caption: 'Testing tìm ra triệu chứng; debugging chữa căn nguyên.',
+        },
+        {
+          type: 'callout',
+          variant: 'exam-trap',
+          title: 'Bẫy thi hay gặp',
+          md: '“Sửa lỗi (fixing defects)” **KHÔNG** phải là một hoạt động của testing — đó là debugging. Đề thường gài đáp án này vào danh sách mục tiêu của testing.',
+        },
+        {
+          type: 'checkpoint',
+          questions: [
+            {
+              id: 'ck-1-1-1',
+              type: 'single',
+              k: 'K1',
+              lo: 'FL-1.1.1',
+              stem: 'Which of the following is NOT a typical objective of testing?',
+              options: [
+                { id: 'a', text: 'Finding defects and causing failures' },
+                { id: 'b', text: 'Building confidence in the level of quality' },
+                { id: 'c', text: 'Fixing the defects that are found' },
+                { id: 'd', text: 'Providing information for decision-making' },
+              ],
+              correct: ['c'],
+              explanation:
+                'Sửa defect (fixing) là một phần của **debugging**, do developer làm — không phải mục tiêu của testing. Các phương án còn lại đều là test objectives chuẩn.',
+              topic: 'test objectives',
+            },
+            {
+              id: 'ck-1-1-2',
+              type: 'truefalse',
+              k: 'K2',
+              lo: 'FL-1.1.2',
+              stem: 'Testing and debugging are the same activity performed by the same role.',
+              correct: ['false'],
+              explanation:
+                'Sai. Testing nhằm *phát hiện* failure; debugging nhằm *tìm và sửa* defect. Chúng khác mục đích và thường do người khác nhau thực hiện.',
+              topic: 'testing vs debugging',
+            },
+          ],
+        },
+      ],
+      keyTerms: [
+        { en: 'Testing', vn: 'Kiểm thử', def: 'Tập hợp hoạt động nhằm phát hiện defect và đánh giá chất lượng work product; gồm cả static và dynamic.' },
+        { en: 'Debugging', vn: 'Gỡ lỗi', def: 'Hoạt động tìm, phân tích và sửa nguyên nhân của failure — thường do developer thực hiện.' },
+        { en: 'Test objective', vn: 'Mục tiêu kiểm thử', def: 'Lý do/mục đích của một hoạt động kiểm thử, ví dụ: tìm defect, tạo niềm tin, cung cấp thông tin ra quyết định.' },
+        { en: 'Validation', vn: 'Thẩm định', def: 'Xác nhận sản phẩm đáp ứng nhu cầu thực của người dùng — “building the right product”.' },
+        { en: 'Verification', vn: 'Kiểm tra', def: 'Xác nhận sản phẩm đáp ứng đặc tả/yêu cầu đã nêu — “building the product right”.' },
+      ],
+    },
+
+    /* ── 1.2 ─────────────────────────────────────────────────────────────── */
+    {
+      id: 'ch1-l2',
+      slug: 'why-testing-necessary',
+      title: { vn: 'Vì sao kiểm thử là cần thiết', en: 'Why is Testing Necessary?' },
+      estMinutes: 12,
+      objectives: ['FL-1.2.1', 'FL-1.2.2', 'FL-1.2.3'],
+      hook: 'Một dấu trừ thay vì dấu cộng từng làm nổ tung tên lửa Ariane 5 trị giá hàng trăm triệu đô. Kiểm thử tồn tại vì con người sai — và phần mềm thì không tha thứ.',
+      blocks: [
+        { type: 'lead', md: 'Kiểm thử giúp giảm rủi ro thất bại khi vận hành, và đóng góp vào chất lượng phần mềm — nhưng nó **không** đảm bảo phần mềm hoàn hảo.' },
+        { type: 'h2', text: 'Đóng góp của kiểm thử vào thành công' },
+        {
+          type: 'list',
+          items: [
+            'Tester tham gia **sớm** (review requirements/design) → ngăn defect lọt vào code',
+            'Test cùng nhóm phát triển → tăng hiểu biết về sản phẩm, giảm hiểu lầm',
+            'Test có hệ thống → phát hiện defect trước khi release, giảm rủi ro vận hành',
+            'Đáp ứng yêu cầu hợp đồng/luật/tiêu chuẩn',
+          ],
+        },
+        {
+          type: 'diagram',
+          kind: 'defect-cost',
+          caption: 'Phát hiện defect càng muộn, chi phí sửa càng đắt — nền tảng của “early testing”.',
+        },
+        { type: 'h2', text: 'Testing và Quality Assurance (QA)' },
+        { type: 'p', md: 'Nhiều người dùng lẫn lộn hai khái niệm. Đây là LO **K1** — phải nhớ chính xác:' },
+        {
+          type: 'table',
+          headers: ['Khía cạnh', 'Quality Assurance (QA)', 'Testing'],
+          rows: [
+            ['Trọng tâm', 'Cải tiến **quy trình** (process-oriented)', 'Đánh giá **sản phẩm** (product-oriented)'],
+            ['Niềm tin vào', 'Quy trình đúng → sản phẩm tốt', 'Bằng chứng thực tế từ work product'],
+            ['Thuộc về', 'Quality Management nói chung', 'Một phần của **Quality Control (QC)**'],
+          ],
+          caption: 'QA hướng quy trình; Testing (thuộc QC) hướng sản phẩm. Cả hai cùng phục vụ Quality Management.',
+        },
+        {
+          type: 'callout',
+          variant: 'exam-trap',
+          md: '**Testing không phải là QA.** Testing là một hình thức **Quality Control** (product-oriented, corrective). QA là **process-oriented, preventive**. Đề rất thích đảo hai cái này.',
+        },
+        { type: 'h2', text: 'Error → Defect → Failure → (Root cause)' },
+        { type: 'p', md: 'Chuỗi nhân quả này là **xương sống** của Chương 1. Học thuộc thứ tự và định nghĩa:' },
+        {
+          type: 'diagram',
+          kind: 'error-defect-failure',
+          caption: 'Con người mắc error → tạo ra defect trong sản phẩm → khi chạy có thể gây failure.',
+        },
+        {
+          type: 'list',
+          items: [
+            '**Error (mistake)**: hành động sai của *con người* (ví dụ hiểu sai yêu cầu).',
+            '**Defect (fault/bug)**: khiếm khuyết *trong work product* do error tạo ra (dòng code sai).',
+            '**Failure**: *hành vi sai* quan sát được khi phần mềm chạy (kết quả không như mong đợi).',
+            '**Root cause**: nguyên nhân *gốc rễ* sâu nhất; nếu loại bỏ sẽ ngăn lỗi tái diễn.',
+          ],
+        },
+        {
+          type: 'callout',
+          variant: 'info',
+          md: 'Không phải defect nào cũng gây failure: một defect ở đoạn code **không bao giờ được chạy** sẽ không tạo failure. Failure cũng có thể đến từ **điều kiện môi trường** (bức xạ, từ trường…) chứ không chỉ từ defect.',
+        },
+        {
+          type: 'interactive',
+          kind: 'sort',
+          title: 'Phân loại nhanh',
+          prompt: 'Kéo mỗi tình huống vào đúng nhóm.',
+          buckets: ['Error', 'Defect', 'Failure'],
+          items: [
+            { label: 'Lập trình viên hiểu nhầm công thức tính thuế', correctBucket: 'Error' },
+            { label: 'Dòng code dùng dấu + thay vì dấu −', correctBucket: 'Defect' },
+            { label: 'Hoá đơn in ra sai số tiền khi chạy', correctBucket: 'Failure' },
+            { label: 'Thiếu một điều kiện trong câu lệnh if', correctBucket: 'Defect' },
+            { label: 'App crash khi người dùng bấm “Lưu”', correctBucket: 'Failure' },
+          ],
+        },
+        {
+          type: 'checkpoint',
+          questions: [
+            {
+              id: 'ck-1-2-1',
+              type: 'single',
+              k: 'K2',
+              lo: 'FL-1.2.3',
+              stem: 'A developer misreads a specification and writes a wrong calculation. The wrong code, when executed, produces an incorrect invoice. What are the error, defect, and failure respectively?',
+              options: [
+                { id: 'a', text: 'Wrong invoice → wrong code → misreading' },
+                { id: 'b', text: 'Misreading the spec → the wrong code → the incorrect invoice' },
+                { id: 'c', text: 'The wrong code → misreading → incorrect invoice' },
+                { id: 'd', text: 'Incorrect invoice → misreading → wrong code' },
+              ],
+              correct: ['b'],
+              explanation:
+                'Error = hành động sai của con người (đọc nhầm spec). Defect = khiếm khuyết trong sản phẩm (code sai). Failure = hành vi sai khi chạy (hoá đơn sai).',
+              topic: 'error-defect-failure',
+            },
+            {
+              id: 'ck-1-2-2',
+              type: 'single',
+              k: 'K1',
+              lo: 'FL-1.2.2',
+              stem: 'Which statement best describes the relationship between testing and quality assurance (QA)?',
+              options: [
+                { id: 'a', text: 'Testing and QA are synonyms' },
+                { id: 'b', text: 'QA is product-oriented; testing is process-oriented' },
+                { id: 'c', text: 'Testing is a form of quality control; QA is process-oriented' },
+                { id: 'd', text: 'QA replaces the need for testing' },
+              ],
+              correct: ['c'],
+              explanation:
+                'Testing là một dạng **quality control** (đánh giá sản phẩm). QA hướng **quy trình** (preventive). Chúng bổ trợ nhau, không thay thế nhau.',
+              topic: 'testing vs QA',
+            },
+          ],
+        },
+      ],
+      keyTerms: [
+        { en: 'Error / Mistake', vn: 'Lỗi (con người)', def: 'Hành động của con người tạo ra kết quả không đúng.' },
+        { en: 'Defect / Fault / Bug', vn: 'Khiếm khuyết', def: 'Một khuyết điểm trong work product có thể khiến phần mềm không thực hiện đúng chức năng.' },
+        { en: 'Failure', vn: 'Sự cố', def: 'Sự kiện một thành phần/hệ thống không thực hiện đúng chức năng yêu cầu khi chạy.' },
+        { en: 'Root cause', vn: 'Nguyên nhân gốc', def: 'Nguyên nhân cơ bản nhất của một vấn đề; loại bỏ nó giúp ngăn vấn đề tái diễn.' },
+        { en: 'Quality assurance', vn: 'Đảm bảo chất lượng', def: 'Hoạt động hướng quy trình, mang tính phòng ngừa, nhằm tạo niềm tin vào chất lượng.' },
+        { en: 'Quality control', vn: 'Kiểm soát chất lượng', def: 'Hoạt động hướng sản phẩm (gồm testing) nhằm phát hiện và khắc phục vấn đề chất lượng.' },
+      ],
+    },
+
+    /* ── 1.3 ─────────────────────────────────────────────────────────────── */
+    {
+      id: 'ch1-l3',
+      slug: 'testing-principles',
+      title: { vn: '7 Nguyên lý Kiểm thử', en: 'Seven Testing Principles' },
+      estMinutes: 10,
+      objectives: ['FL-1.3.1'],
+      hook: '7 nguyên lý này là “hiến pháp” của nghề test. Gần như chương nào của đề cũng đụng tới ít nhất một nguyên lý.',
+      blocks: [
+        { type: 'lead', md: 'Đây là phần **chắc chắn có câu hỏi**. Mẹo: hiểu *ý nghĩa* mỗi nguyên lý thay vì học vẹt — đề thường mô tả tình huống rồi hỏi “vi phạm/minh hoạ nguyên lý nào”.' },
+        { type: 'interactive', kind: 'principles' },
+        {
+          type: 'callout',
+          variant: 'tip',
+          title: 'Cách nhớ nhanh',
+          md: '**Presence** (không chứng minh hết lỗi) · **Exhaustive impossible** (không test hết) · **Early** (test sớm) · **Cluster** (lỗi tụ cụm) · **Pesticide** (test nhờn) · **Context** (tuỳ ngữ cảnh) · **Absence-of-errors fallacy** (hết lỗi chưa chắc hữu ích).',
+        },
+        {
+          type: 'analogy',
+          emoji: '🐛',
+          title: 'Pesticide paradox',
+          md: 'Như thuốc trừ sâu xịt mãi một loại, sâu sẽ kháng. Chạy mãi cùng bộ test, nó không bắt được bug mới — phải **làm mới và đa dạng hoá** test case.',
+        },
+        {
+          type: 'checkpoint',
+          questions: [
+            {
+              id: 'ck-1-3-1',
+              type: 'single',
+              k: 'K2',
+              lo: 'FL-1.3.1',
+              stem: 'A test team runs the same regression suite every release. Over time it finds fewer and fewer new defects. Which principle explains this?',
+              options: [
+                { id: 'a', text: 'Defects cluster together' },
+                { id: 'b', text: 'Tests wear out (pesticide paradox)' },
+                { id: 'c', text: 'Exhaustive testing is impossible' },
+                { id: 'd', text: 'Testing is context dependent' },
+              ],
+              correct: ['b'],
+              explanation:
+                'Lặp lại cùng bộ test khiến nó “nhờn” và không tìm thêm bug mới — đúng là **pesticide paradox**. Cần rà soát, cập nhật và bổ sung test case mới.',
+              topic: 'principles',
+            },
+            {
+              id: 'ck-1-3-2',
+              type: 'single',
+              k: 'K2',
+              lo: 'FL-1.3.1',
+              stem: 'A manager claims: "All tests passed, so the software has no defects and will satisfy users." Which principles are being violated?',
+              options: [
+                { id: 'a', text: 'Testing shows presence of defects; and absence-of-errors fallacy' },
+                { id: 'b', text: 'Early testing; and defects cluster' },
+                { id: 'c', text: 'Pesticide paradox; and context dependent' },
+                { id: 'd', text: 'Exhaustive testing; and early testing' },
+              ],
+              correct: ['a'],
+              explanation:
+                'Test pass không chứng minh “không còn defect” (principle 1). Và kể cả không lỗi, phần mềm vẫn có thể vô dụng nếu sai nhu cầu (absence-of-errors fallacy).',
+              topic: 'principles',
+            },
+          ],
+        },
+      ],
+      keyTerms: [
+        { en: 'Pesticide paradox', vn: 'Nghịch lý thuốc trừ sâu', def: 'Lặp lại cùng bộ test sẽ không phát hiện thêm defect mới; cần làm mới test case.' },
+        { en: 'Defect clustering', vn: 'Sự tụ cụm khiếm khuyết', def: 'Phần lớn defect thường tập trung ở một số ít module (nguyên lý Pareto).' },
+        { en: 'Absence-of-errors fallacy', vn: 'Ngộ nhận không lỗi', def: 'Phần mềm không còn lỗi vẫn có thể vô dụng nếu không đáp ứng nhu cầu người dùng.' },
+      ],
+    },
+
+    /* ── 1.4 ─────────────────────────────────────────────────────────────── */
+    {
+      id: 'ch1-l4',
+      slug: 'test-activities-testware-roles',
+      title: { vn: 'Hoạt động, Testware & Vai trò', en: 'Test Activities, Testware & Roles' },
+      estMinutes: 13,
+      objectives: ['FL-1.4.1', 'FL-1.4.2', 'FL-1.4.3', 'FL-1.4.4', 'FL-1.4.5'],
+      hook: 'Quy trình test không phải “một bước chạy test”. Nó là 7 nhóm hoạt động đan xen — và mỗi hoạt động đẻ ra một loại testware riêng.',
+      blocks: [
+        { type: 'h2', text: 'Quy trình test trong ngữ cảnh' },
+        { type: 'p', md: 'Không có một quy trình test “chuẩn vạn năng”. Cách test chịu tác động bởi **ngữ cảnh**: mô hình SDLC, mức rủi ro, lĩnh vực (domain), ràng buộc pháp lý, kỹ năng nhóm, công cụ sẵn có…' },
+        { type: 'interactive', kind: 'test-process' },
+        {
+          type: 'callout',
+          variant: 'info',
+          title: 'Các hoạt động đan xen',
+          md: 'Bảy hoạt động trên **không tuần tự cứng**. Chúng chồng lấn, lặp lại (đặc biệt trong Agile). *Monitoring & control* diễn ra xuyên suốt.',
+        },
+        { type: 'h2', text: 'Testware — sản phẩm của từng hoạt động' },
+        {
+          type: 'table',
+          headers: ['Hoạt động', 'Testware tạo ra (ví dụ)'],
+          rows: [
+            ['Test planning', 'Test plan, lịch, tiêu chí rủi ro'],
+            ['Test analysis', 'Test conditions, defect trong test basis'],
+            ['Test design', 'Test cases, coverage items, test data requirements'],
+            ['Test implementation', 'Test procedures, test scripts, test data, môi trường'],
+            ['Test execution', 'Test logs, defect reports'],
+            ['Test completion', 'Test summary report, action items, testware đã lưu trữ'],
+          ],
+          caption: 'Biết hoạt động nào đẻ ra testware nào là một dạng câu hỏi K2 phổ biến.',
+        },
+        { type: 'h2', text: 'Traceability — sợi chỉ xuyên suốt' },
+        { type: 'p', md: '**Traceability** là khả năng liên kết: test basis ↔ test condition ↔ test case ↔ kết quả ↔ defect. Nó giúp:' },
+        {
+          type: 'list',
+          items: [
+            'Đánh giá **coverage** (mỗi requirement có test chưa?)',
+            'Phân tích **tác động** khi requirement thay đổi',
+            'Báo cáo dễ hiểu cho stakeholder (gắn kết quả test với mục tiêu kinh doanh)',
+            'Hỗ trợ audit và đáp ứng yêu cầu tuân thủ',
+          ],
+        },
+        {
+          type: 'analogy',
+          emoji: '🧵',
+          md: 'Traceability như sợi chỉ đỏ nối từ “khách hàng muốn gì” → “ta test cái gì” → “kết quả ra sao”. Kéo một đầu, biết ngay đầu kia bị ảnh hưởng.',
+        },
+        { type: 'h2', text: 'Hai vai trò chính' },
+        {
+          type: 'table',
+          headers: ['', 'Test management role', 'Testing role'],
+          rows: [
+            ['Trọng tâm', 'Quản lý: lập kế hoạch, giám sát, điều phối', 'Kỹ thuật: phân tích, thiết kế, thực thi test'],
+            ['Việc tiêu biểu', 'Test plan, phân bổ nguồn lực, báo cáo', 'Viết & chạy test case, log defect'],
+          ],
+          caption: 'Tuỳ ngữ cảnh, một người có thể đảm nhận cả hai (ví dụ nhóm Agile nhỏ).',
+        },
+        {
+          type: 'checkpoint',
+          questions: [
+            {
+              id: 'ck-1-4-1',
+              type: 'single',
+              k: 'K2',
+              lo: 'FL-1.4.1',
+              stem: 'During which test activity are test conditions identified by analysing the test basis?',
+              options: [
+                { id: 'a', text: 'Test planning' },
+                { id: 'b', text: 'Test analysis' },
+                { id: 'c', text: 'Test design' },
+                { id: 'd', text: 'Test implementation' },
+              ],
+              correct: ['b'],
+              explanation:
+                'Test analysis trả lời “**test cái gì?**” — phân tích test basis để xác định test conditions. Test design mới trả lời “test **thế nào**” (tạo test case).',
+              topic: 'test process',
+            },
+            {
+              id: 'ck-1-4-2',
+              type: 'single',
+              k: 'K2',
+              lo: 'FL-1.4.4',
+              stem: 'What is a key benefit of maintaining traceability between the test basis and test cases?',
+              options: [
+                { id: 'a', text: 'It removes the need for test planning' },
+                { id: 'b', text: 'It enables coverage assessment and impact analysis' },
+                { id: 'c', text: 'It guarantees the software has no defects' },
+                { id: 'd', text: 'It replaces the test summary report' },
+              ],
+              correct: ['b'],
+              explanation:
+                'Traceability cho phép đánh giá độ phủ và phân tích tác động khi có thay đổi — đồng thời hỗ trợ báo cáo và audit.',
+              topic: 'traceability',
+            },
+          ],
+        },
+      ],
+      keyTerms: [
+        { en: 'Testware', vn: 'Sản phẩm kiểm thử', def: 'Các work product tạo ra trong quá trình test: test plan, test case, test data, test report…' },
+        { en: 'Test basis', vn: 'Cơ sở kiểm thử', def: 'Tài liệu/nguồn dùng để rút ra test case (requirements, design, code, rủi ro…).' },
+        { en: 'Test condition', vn: 'Điều kiện kiểm thử', def: 'Một khía cạnh có thể kiểm chứng của test object, xác định trong test analysis.' },
+        { en: 'Traceability', vn: 'Khả năng truy vết', def: 'Liên kết hai chiều giữa test basis, test condition, test case, kết quả và defect.' },
+      ],
+    },
+
+    /* ── 1.5 ─────────────────────────────────────────────────────────────── */
+    {
+      id: 'ch1-l5',
+      slug: 'skills-and-practices',
+      title: { vn: 'Kỹ năng & Thực hành tốt', en: 'Essential Skills & Good Practices' },
+      estMinutes: 9,
+      objectives: ['FL-1.5.1', 'FL-1.5.2', 'FL-1.5.3'],
+      hook: 'Test giỏi không chỉ là biết kỹ thuật. Nó còn là tư duy phản biện, giao tiếp khéo và một góc nhìn độc lập đủ tỉnh táo.',
+      blocks: [
+        { type: 'h2', text: 'Kỹ năng cốt lõi của tester' },
+        {
+          type: 'list',
+          items: [
+            '**Kiến thức testing**: kỹ thuật test, quy trình, công cụ',
+            '**Sự tỉ mỉ, hoài nghi lành mạnh, tư duy phản biện** (critical thinking)',
+            '**Giao tiếp** tốt: báo cáo defect rõ ràng, không đổ lỗi',
+            '**Kiến thức domain** về lĩnh vực phần mềm',
+            '**Kỹ năng kỹ thuật** & hiểu biết về hệ thống đang test',
+          ],
+        },
+        {
+          type: 'callout',
+          variant: 'tip',
+          title: 'Báo cáo defect tốt = ngoại giao',
+          md: 'Mô tả *hiện tượng và sự thật*, tránh ngôn từ quy kết cá nhân. Mục tiêu là sửa sản phẩm, không phải “bắt lỗi người”.',
+        },
+        { type: 'h2', text: 'Whole-team approach' },
+        { type: 'p', md: 'Trong nhiều nhóm Agile, **cả nhóm cùng chịu trách nhiệm chất lượng**. Bất kỳ ai cũng có thể làm việc test; tester chia sẻ kiến thức để nâng năng lực test của cả nhóm.' },
+        {
+          type: 'list',
+          items: [
+            'Tăng giao tiếp & cộng tác trong nhóm',
+            'Tận dụng nhiều góc nhìn khác nhau cho test',
+            'Tester đóng góp sớm vào user story, tiêu chí chấp nhận',
+          ],
+        },
+        { type: 'h2', text: 'Tính độc lập trong kiểm thử (Independence)' },
+        { type: 'p', md: 'Test có thể do tác giả tự làm, hoặc do người/đội độc lập hơn. Độc lập càng cao thường tìm được loại defect khác — nhưng có cái giá của nó.' },
+        {
+          type: 'table',
+          headers: ['', 'Lợi ích', 'Hạn chế'],
+          rows: [
+            [
+              'Độc lập cao',
+              'Nhìn khách quan, ít “mù” theo giả định của tác giả; thấy defect khác loại',
+              'Có thể bị cô lập, thiếu thông tin; dev đùn trách nhiệm chất lượng; giao tiếp chậm',
+            ],
+          ],
+          caption: 'Tự test (tác giả) thì nhanh & rẻ nhưng dễ bỏ sót lỗi do thiên kiến của chính mình.',
+        },
+        {
+          type: 'checkpoint',
+          questions: [
+            {
+              id: 'ck-1-5-1',
+              type: 'single',
+              k: 'K2',
+              lo: 'FL-1.5.3',
+              stem: 'Which is a potential DRAWBACK of a high degree of independence of testing?',
+              options: [
+                { id: 'a', text: 'Testers see different kinds of failures than the author' },
+                { id: 'b', text: 'Developers may lose a sense of responsibility for quality' },
+                { id: 'c', text: 'Testing is more objective' },
+                { id: 'd', text: 'Author assumptions are challenged' },
+              ],
+              correct: ['b'],
+              explanation:
+                'Độc lập cao có thể khiến dev “khoán” chất lượng cho đội test và gây cô lập/giao tiếp chậm. Các phương án còn lại là *lợi ích*.',
+              topic: 'independence',
+            },
+            {
+              id: 'ck-1-5-2',
+              type: 'truefalse',
+              k: 'K1',
+              lo: 'FL-1.5.2',
+              stem: 'In a whole-team approach, only dedicated testers are responsible for quality.',
+              correct: ['false'],
+              explanation:
+                'Sai. Trong whole-team approach, **cả nhóm** cùng chịu trách nhiệm về chất lượng, không chỉ riêng tester.',
+              topic: 'whole-team',
+            },
+          ],
+        },
+      ],
+      keyTerms: [
+        { en: 'Whole-team approach', vn: 'Tiếp cận cả nhóm', def: 'Cả nhóm phát triển cùng chịu trách nhiệm về chất lượng; ai cũng có thể tham gia test.' },
+        { en: 'Independence of testing', vn: 'Tính độc lập kiểm thử', def: 'Mức độ tách biệt giữa người test và người tạo ra sản phẩm; càng cao càng khách quan nhưng có đánh đổi.' },
+        { en: 'Critical thinking', vn: 'Tư duy phản biện', def: 'Khả năng đặt câu hỏi, hoài nghi lành mạnh và đánh giá thông tin một cách có hệ thống.' },
+      ],
+    },
+  ],
+
+  quiz: [
+    {
+      id: 'q1-1', type: 'single', k: 'K1', lo: 'FL-1.1.1',
+      stem: 'Which of the following is a typical test objective?',
+      options: [
+        { id: 'a', text: 'Fixing the defects found during execution' },
+        { id: 'b', text: 'Reducing the level of risk of inadequate software quality' },
+        { id: 'c', text: 'Writing the production code' },
+        { id: 'd', text: 'Designing the system architecture' },
+      ],
+      correct: ['b'],
+      explanation: 'Giảm rủi ro chất lượng là test objective chuẩn. Sửa defect là debugging; viết code/thiết kế kiến trúc không phải mục tiêu của testing.',
+      topic: 'test objectives',
+    },
+    {
+      id: 'q1-2', type: 'single', k: 'K2', lo: 'FL-1.1.2',
+      stem: 'Which activity is part of debugging rather than testing?',
+      options: [
+        { id: 'a', text: 'Designing test cases' },
+        { id: 'b', text: 'Executing tests to trigger failures' },
+        { id: 'c', text: 'Locating and fixing the cause of a failure' },
+        { id: 'd', text: 'Reporting test results' },
+      ],
+      correct: ['c'],
+      explanation: 'Tìm và sửa nguyên nhân của failure là debugging. Thiết kế/chạy test và báo cáo là testing.',
+      topic: 'testing vs debugging',
+    },
+    {
+      id: 'q1-3', type: 'single', k: 'K2', lo: 'FL-1.2.3',
+      stem: 'A defect exists in a section of code that is never executed. What is the consequence?',
+      options: [
+        { id: 'a', text: 'It will always cause a failure' },
+        { id: 'b', text: 'It cannot cause a failure unless that code is executed' },
+        { id: 'c', text: 'It is automatically a root cause' },
+        { id: 'd', text: 'It is the same as an error' },
+      ],
+      correct: ['b'],
+      explanation: 'Defect chỉ gây failure khi đoạn code chứa nó được thực thi với điều kiện phù hợp. Defect ở code không chạy thì không tạo failure.',
+      topic: 'error-defect-failure',
+    },
+    {
+      id: 'q1-4', type: 'single', k: 'K1', lo: 'FL-1.2.2',
+      stem: 'Testing is best described as part of which of the following?',
+      options: [
+        { id: 'a', text: 'Quality assurance (process-oriented)' },
+        { id: 'b', text: 'Quality control (product-oriented)' },
+        { id: 'c', text: 'Project management' },
+        { id: 'd', text: 'Configuration management' },
+      ],
+      correct: ['b'],
+      explanation: 'Testing là một dạng quality control — hướng sản phẩm. QA hướng quy trình.',
+      topic: 'testing vs QA',
+    },
+    {
+      id: 'q1-5', type: 'single', k: 'K2', lo: 'FL-1.3.1',
+      stem: 'Most defects found during testing are concentrated in a small number of modules. This illustrates which principle?',
+      options: [
+        { id: 'a', text: 'Exhaustive testing is impossible' },
+        { id: 'b', text: 'Defects cluster together' },
+        { id: 'c', text: 'Tests wear out' },
+        { id: 'd', text: 'Early testing saves time and money' },
+      ],
+      correct: ['b'],
+      explanation: 'Defect tập trung ở số ít module là “defects cluster together” (Pareto). Dùng để ưu tiên test vào điểm nóng.',
+      topic: 'principles',
+    },
+    {
+      id: 'q1-6', type: 'single', k: 'K2', lo: 'FL-1.3.1',
+      stem: 'Why is exhaustive testing usually impractical?',
+      options: [
+        { id: 'a', text: 'Because testers lack skill' },
+        { id: 'b', text: 'Because the number of input/precondition combinations is too large' },
+        { id: 'c', text: 'Because tools are too expensive' },
+        { id: 'd', text: 'Because defects always cluster' },
+      ],
+      correct: ['b'],
+      explanation: 'Trừ trường hợp tầm thường, số tổ hợp đầu vào và điều kiện là quá lớn để test hết → phải ưu tiên theo rủi ro.',
+      topic: 'principles',
+    },
+    {
+      id: 'q1-7', type: 'single', k: 'K2', lo: 'FL-1.4.1',
+      stem: 'Which test activity produces test procedures and prepares the test environment?',
+      options: [
+        { id: 'a', text: 'Test analysis' },
+        { id: 'b', text: 'Test design' },
+        { id: 'c', text: 'Test implementation' },
+        { id: 'd', text: 'Test completion' },
+      ],
+      correct: ['c'],
+      explanation: 'Test implementation chuẩn bị test ware (procedures, scripts, data) và môi trường để sẵn sàng chạy test.',
+      topic: 'test process',
+    },
+    {
+      id: 'q1-8', type: 'multi', k: 'K2', lo: 'FL-1.4.4',
+      stem: 'Which of the following are benefits of traceability? (Choose TWO)',
+      options: [
+        { id: 'a', text: 'Assessing test coverage against the test basis' },
+        { id: 'b', text: 'Guaranteeing defect-free software' },
+        { id: 'c', text: 'Supporting impact analysis when requirements change' },
+        { id: 'd', text: 'Eliminating the need for test design' },
+      ],
+      correct: ['a', 'c'],
+      explanation: 'Traceability giúp đánh giá coverage và phân tích tác động khi yêu cầu thay đổi. Nó không đảm bảo phần mềm hết lỗi, cũng không loại bỏ test design.',
+      topic: 'traceability',
+    },
+    {
+      id: 'q1-9', type: 'single', k: 'K2', lo: 'FL-1.5.3',
+      stem: 'Which is an ADVANTAGE of independent testing?',
+      options: [
+        { id: 'a', text: 'Developers feel less responsible for quality' },
+        { id: 'b', text: 'Independent testers may recognise different kinds of failures' },
+        { id: 'c', text: 'It is always cheaper' },
+        { id: 'd', text: 'It removes the need for communication' },
+      ],
+      correct: ['b'],
+      explanation: 'Người test độc lập mang góc nhìn khách quan, thấy loại defect mà tác giả dễ bỏ sót. Mất cảm giác trách nhiệm là *hạn chế*.',
+      topic: 'independence',
+    },
+    {
+      id: 'q1-10', type: 'single', k: 'K2', lo: 'FL-1.3.1',
+      stem: 'A team believes that passing all tests proves the product is bug-free. Which principle corrects this belief?',
+      options: [
+        { id: 'a', text: 'Testing shows the presence of defects, not their absence' },
+        { id: 'b', text: 'Defects cluster together' },
+        { id: 'c', text: 'Testing is context dependent' },
+        { id: 'd', text: 'Early testing saves time and money' },
+      ],
+      correct: ['a'],
+      explanation: 'Test pass chỉ cho thấy *chưa tìm thấy* lỗi, không chứng minh “không còn lỗi”. Đó là nguyên lý số 1.',
+      topic: 'principles',
+    },
+  ],
+}
+
+export default ch1
